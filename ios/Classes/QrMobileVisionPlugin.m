@@ -143,12 +143,13 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         }
         
         if (features.count > 0) {
-            CIQRCodeFeature *feature0 = (CIQRCodeFeature *)features[0];
-            NSString * value = feature0.messageString;
-            NSLog(@"Detected barcode: %@", value);
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self->_onCodeAvailable(value);
-            });
+            for (CIQRCodeFeature* feature in features) {
+                NSString * value = feature.messageString;
+                NSLog(@"Detected barcode: %@", value);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self->_onCodeAvailable(value);
+                });
+            }
         }
         
         self->_isScanning = NO;
